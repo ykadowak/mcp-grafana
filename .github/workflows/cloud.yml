@@ -1,4 +1,4 @@
-name: Tests
+name: Cloud tests
 
 on:
   push:
@@ -13,14 +13,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      # Start the Grafana server.
-      # Do this early so that it can start up in time for the tests to run.
-      # We may need to add a wait here.
-      - name: Start docker-compose services
-        uses: hoverkraft-tech/compose-action@v2.0.2
-        with:
-          compose-file: "docker-compose.yaml"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -40,4 +32,8 @@ jobs:
         run: uv run ruff check .
 
       - name: Run tests
-        run: uv run pytest tests --integration
+        run: uv run pytest tests --cloud
+        env:
+          # E.g. https://mcptests.grafana-dev.net.
+          GRAFANA_URL: ${{ vars.CLOUD_GRAFANA_URL }}
+          GRAFANA_API_KEY: ${{ secrets.CLOUD_GRAFANA_API_KEY }}
