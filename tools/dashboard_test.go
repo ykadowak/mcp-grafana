@@ -15,14 +15,14 @@ import (
 func TestDashboardTools(t *testing.T) {
 	t.Run("get dashboard by uid", func(t *testing.T) {
 		ctx := newTestContext()
-		
+
 		// First, let's search for a dashboard to get its UID
 		searchResults, err := searchDashboards(ctx, SearchDashboardsParams{})
 		require.NoError(t, err)
 		require.Greater(t, len(searchResults), 0, "No dashboards found")
-		
+
 		dashboardUID := searchResults[0].UID
-		
+
 		// Now test the get dashboard by uid functionality
 		result, err := getDashboardByUID(ctx, GetDashboardByUIDParams{
 			UID: dashboardUID,
@@ -36,7 +36,7 @@ func TestDashboardTools(t *testing.T) {
 
 	t.Run("get dashboard by uid - invalid uid", func(t *testing.T) {
 		ctx := newTestContext()
-		
+
 		_, err := getDashboardByUID(ctx, GetDashboardByUIDParams{
 			UID: "non-existent-uid",
 		})
